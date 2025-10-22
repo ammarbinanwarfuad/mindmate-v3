@@ -82,7 +82,7 @@ export async function POST(req: Request) {
 
         if ((error as any).name === 'ZodError') {
             return NextResponse.json(
-                { error: 'Invalid input data', details: error.errors },
+                { error: 'Invalid input data', details: (error as any).errors },
                 { status: 400 }
             );
         }
