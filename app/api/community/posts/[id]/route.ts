@@ -120,7 +120,7 @@ export async function DELETE(
             );
         }
 
-        await ForumPostModel.findByIdAndDelete(params.id);
+        await ForumPostModel.findByIdAndDelete(id);
 
         return NextResponse.json({
             success: true,
