@@ -70,6 +70,15 @@ export async function POST(
             );
         }
 
+        await connectDB();
+
+        const { id } = await params;
+        const user = await UserModel.findById(session.user.id);
+        if (!user) {
+            return NextResponse.json({ error: 'User not found' }, { status: 404 });
+        }
+
+        const post = await ForumPostModel.findById(id);
 
         if (!post) {
             return NextResponse.json(
