@@ -8,7 +8,7 @@ import { createNotification } from '@/lib/services/notifications';
 
 export async function GET(
     req: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const { searchParams } = new URL(req.url);
@@ -16,7 +16,8 @@ export async function GET(
 
         await connectDB();
 
-        const post = await ForumPostModel.findById(params.id);
+        const { id } = await params;
+        const post = await ForumPostModel.findById(id);
 
         if (!post) {
             return NextResponse.json(
@@ -69,14 +70,6 @@ export async function POST(
             );
         }
 
-        await connectDB();
-
-        const user = await UserModel.findById(session.user.id);
-        if (!user) {
-            return NextResponse.json({ error: 'User not found' }, { status: 404 });
-        }
-
-        const post = await ForumPostModel.findById(params.id);
 
         if (!post) {
             return NextResponse.json(

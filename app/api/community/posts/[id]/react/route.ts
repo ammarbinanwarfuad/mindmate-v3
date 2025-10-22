@@ -8,7 +8,7 @@ import { createNotification } from '@/lib/services/notifications';
 
 export async function POST(
     req: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const session = await getServerSession(authOptions);
@@ -30,7 +30,8 @@ export async function POST(
 
         await connectDB();
 
-        const post = await ForumPostModel.findById(params.id);
+        const { id } = await params;
+        const post = await ForumPostModel.findById(id);
 
         if (!post) {
             return NextResponse.json(

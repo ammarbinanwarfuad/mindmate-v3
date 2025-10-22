@@ -7,12 +7,13 @@ import ForumPostModel from '@/lib/db/models/ForumPost';
 // GET single post
 export async function GET(
     req: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         await connectDB();
 
-        const post = await ForumPostModel.findById(params.id).lean();
+        const { id } = await params;
+        const post = await ForumPostModel.findById(id).lean();
 
         if (!post) {
             return NextResponse.json(
@@ -37,7 +38,7 @@ export async function GET(
 // UPDATE post
 export async function PATCH(
     req: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const session = await getServerSession(authOptions);
@@ -50,7 +51,8 @@ export async function PATCH(
 
         await connectDB();
 
-        const post = await ForumPostModel.findById(params.id);
+        const { id } = await params;
+        const post = await ForumPostModel.findById(id);
 
         if (!post) {
             return NextResponse.json(
@@ -89,7 +91,7 @@ export async function PATCH(
 // DELETE post
 export async function DELETE(
     req: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const session = await getServerSession(authOptions);
@@ -100,7 +102,8 @@ export async function DELETE(
 
         await connectDB();
 
-        const post = await ForumPostModel.findById(params.id);
+        const { id } = await params;
+        const post = await ForumPostModel.findById(id);
 
         if (!post) {
             return NextResponse.json(

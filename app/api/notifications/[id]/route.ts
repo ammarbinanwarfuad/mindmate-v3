@@ -5,7 +5,7 @@ import { markAsRead } from '@/lib/services/notifications';
 
 export async function PATCH(
     req: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const session = await getServerSession(authOptions);
@@ -14,7 +14,8 @@ export async function PATCH(
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        await markAsRead(params.id);
+        const { id } = await params;
+        await markAsRead(id);
 
         return NextResponse.json({ success: true });
     } catch (error) {

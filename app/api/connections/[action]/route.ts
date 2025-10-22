@@ -14,7 +14,7 @@ const connectionActionSchema = z.object({
 // Accept or decline connection request
 export async function POST(
     req: Request,
-    { params }: { params: { action: string } }
+    { params }: { params: Promise<{ action: string }> }
 ) {
     try {
         const session = await getServerSession(authOptions);
@@ -23,7 +23,7 @@ export async function POST(
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        const action = params.action;
+        const { action } = await params;
 
         if (!['accept', 'decline'].includes(action)) {
             return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
@@ -92,9 +92,10 @@ export async function POST(
                 { status: 400 }
             );
         }
-        console.error(`Error ${params.action}ing connection:`, error);
+        const { action } = await params;
+        console.error(`Error ${action}ing connection:`, error);
         return NextResponse.json(
-            { error: `Failed to ${params.action} connection` },
+            { error: `Failed to ${action} connection` },
             { status: 500 }
         );
     }

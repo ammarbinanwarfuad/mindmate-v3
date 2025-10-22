@@ -8,7 +8,7 @@ import { createNotification } from '@/lib/services/notifications';
 
 export async function POST(
     req: Request,
-    { params }: { params: { id: string; commentId: string } }
+    { params }: { params: Promise<{ id: string; commentId: string }> }
 ) {
     try {
         const session = await getServerSession(authOptions);
@@ -19,7 +19,8 @@ export async function POST(
 
         await connectDB();
 
-        const post = await ForumPostModel.findById(params.id);
+        const { id, commentId } = await params;
+        const post = await ForumPostModel.findById(id);
 
         if (!post) {
             return NextResponse.json(
@@ -28,7 +29,7 @@ export async function POST(
             );
         }
 
-        const comment = post.comments.id(params.commentId);
+        const comment = post.comments.id(commentId);
 
         if (!comment) {
             return NextResponse.json(
@@ -68,7 +69,7 @@ export async function POST(
                 {
                     fromUserId: userId,
                     fromUserName: userName,
-                    metadata: { postId: post._id, commentId: params.commentId }
+                    metadata: { postId: post._id, commentId }
                 }
             );
         }
