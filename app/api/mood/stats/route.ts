@@ -30,7 +30,7 @@ export async function GET(req: Request) {
 
         // Calculate statistics
         const avgMood = moodEntries.length > 0
-            ? moodEntries.reduce((sum, entry) => sum + entry.moodScore, 0) / moodEntries.length
+            ? moodEntries.reduce((sum: number, entry: any) => sum + entry.moodScore, 0) / moodEntries.length
             : 0;
 
         const moodTrend = calculateTrend(moodEntries);

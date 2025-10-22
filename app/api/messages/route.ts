@@ -148,7 +148,7 @@ export async function GET(req: Request) {
             .lean();
 
         // Decrypt messages and mark as read
-        const decryptedMessages = messages.map((msg) => {
+        const decryptedMessages = messages.map((msg: any) => {
             try {
                 const decryptedContent = decrypt({
                     encrypted: msg.encryptedContent,

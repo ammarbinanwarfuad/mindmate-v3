@@ -60,7 +60,7 @@ export async function GET(req: Request) {
 
         // Populate user details
         const connectionsWithUsers = await Promise.all(
-            connections.map(async (connection) => {
+            connections.map(async (connection: any) => {
                 const otherUserId = connection.users.find(
                     (id: any) => id.toString() !== session.user.id
                 );
