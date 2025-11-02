@@ -6,6 +6,7 @@ import ConversationModel from '@/lib/db/models/Conversation';
 import { getChatResponse } from '@/lib/services/gemini';
 import { detectCrisis } from '@/lib/services/crisis-detection';
 import { createNotification } from '@/lib/services/notifications';
+import { buildUserContext } from '@/lib/services/user-context';
 
 export async function GET(req: Request) {
     try {
@@ -103,10 +104,21 @@ export async function POST(req: Request) {
             timestamp: new Date(),
         });
 
-        // Get AI response
+        // Build user context for personalization
+        let userContext;
+        try {
+            userContext = await buildUserContext(session.user.id);
+        } catch (error) {
+            console.error('Error building user context:', error);
+            // Continue without context if there's an error
+            userContext = undefined;
+        }
+
+        // Get AI response with user context
         const aiResponse = await getChatResponse(
             conversation.messages.slice(-10), // Last 10 messages for context
-            message
+            message,
+            userContext // Pass user context for personalization
         );
 
         // Add AI response

@@ -6,6 +6,7 @@ import MoodEntryModel from '@/lib/db/models/MoodEntry';
 import { moodEntrySchema } from '@/lib/utils/validation';
 import { encrypt } from '@/lib/services/encryption';
 import { createNotification } from '@/lib/services/notifications';
+import { invalidateUserContext } from '@/lib/services/user-context';
 import { MOOD_EMOJIS } from '@/lib/utils/constants';
 
 export async function GET(req: Request) {
@@ -103,6 +104,9 @@ export async function POST(req: Request) {
                 metadata: { moodScore: validatedData.moodScore, entryId: moodEntry._id }
             }
         );
+
+        // Invalidate user context cache since mood data changed
+        invalidateUserContext(session.user.id);
 
         return NextResponse.json(
             { success: true, data: moodEntry },

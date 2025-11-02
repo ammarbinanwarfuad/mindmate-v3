@@ -1,8 +1,9 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import { UserContext, buildContextSummary } from './user-context';
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
-const SYSTEM_PROMPT = `You are MindMate, an empathetic AI wellness companion for university students. Your role:
+const BASE_SYSTEM_PROMPT = `You are MindMate, an empathetic AI wellness companion for university students. Your role:
 
 1. Listen actively and validate feelings
 2. Provide evidence-based coping strategies (CBT, mindfulness)
@@ -25,12 +26,40 @@ export interface ChatResponse {
     error?: boolean;
 }
 
+/**
+ * Build personalized system prompt with user context
+ */
+function buildSystemPrompt(userContext?: UserContext): string {
+    if (!userContext || !userContext.privacySettings.allowPersonalization) {
+        return BASE_SYSTEM_PROMPT;
+    }
+
+    const contextSummary = buildContextSummary(userContext);
+    
+    return `${BASE_SYSTEM_PROMPT}
+
+USER CONTEXT (Use this to provide personalized, context-aware responses):
+${contextSummary}
+
+Important Guidelines:
+- Reference the user's specific mood patterns, triggers, and activities when relevant
+- Use their name and personal details naturally in conversation
+- Remember past conversations and strategies discussed
+- Acknowledge their progress and patterns when appropriate
+- Be mindful of their privacy - only reference data they've shared
+- If mood is declining or triggers are frequent, offer specific help
+- Suggest activities that have been effective for them in the past`;
+}
+
 export async function getChatResponse(
     conversationHistory: ChatMessage[],
-    userMessage: string
+    userMessage: string,
+    userContext?: UserContext
 ): Promise<ChatResponse> {
     try {
         const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-exp' });
+
+        const systemPrompt = buildSystemPrompt(userContext);
 
         const chatHistory = conversationHistory
             .filter(msg => msg.role !== 'system')
@@ -49,9 +78,18 @@ export async function getChatResponse(
             },
         });
 
-        const messageWithContext = conversationHistory.length === 0
-            ? `${SYSTEM_PROMPT}\n\nUser: ${userMessage}`
-            : userMessage;
+        // Include system prompt and context for first message or when context is provided
+        let messageWithContext: string;
+        if (conversationHistory.length === 0) {
+            // First message - include full system prompt with context
+            messageWithContext = `${systemPrompt}\n\nUser: ${userMessage}`;
+        } else if (userContext && conversationHistory.length <= 2) {
+            // Early in conversation - include context reminder if relevant
+            messageWithContext = userMessage;
+        } else {
+            // Regular message - just send the user message
+            messageWithContext = userMessage;
+        }
 
         const result = await chat.sendMessage(messageWithContext);
         const response = await result.response;
@@ -79,10 +117,12 @@ export async function getChatResponse(
 export async function getChatResponseStreaming(
     conversationHistory: ChatMessage[],
     userMessage: string,
-    onChunk: (text: string) => void
+    onChunk: (text: string) => void,
+    userContext?: UserContext
 ): Promise<ChatResponse> {
     try {
         const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-exp' });
+        const systemPrompt = buildSystemPrompt(userContext);
 
         const chatHistory = conversationHistory
             .filter(msg => msg.role !== 'system')
@@ -99,9 +139,13 @@ export async function getChatResponseStreaming(
             },
         });
 
-        const messageWithContext = conversationHistory.length === 0
-            ? `${SYSTEM_PROMPT}\n\nUser: ${userMessage}`
-            : userMessage;
+        // Include system prompt and context for first message
+        let messageWithContext: string;
+        if (conversationHistory.length === 0) {
+            messageWithContext = `${systemPrompt}\n\nUser: ${userMessage}`;
+        } else {
+            messageWithContext = userMessage;
+        }
 
         const result = await chat.sendMessageStream(messageWithContext);
         let fullText = '';

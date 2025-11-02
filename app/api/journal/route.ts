@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/auth';
 import { connectDB } from '@/lib/db/mongodb';
 import JournalEntryModel from '@/lib/db/models/JournalEntry';
+import { invalidateUserContext } from '@/lib/services/user-context';
 
 export async function POST(req: Request) {
     try {
@@ -36,6 +37,9 @@ export async function POST(req: Request) {
             content,
             promptIndex,
         });
+
+        // Invalidate user context cache since journal data changed
+        invalidateUserContext(session.user.id);
 
         return NextResponse.json({
             success: true,
