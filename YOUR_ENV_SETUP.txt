@@ -1,0 +1,68 @@
+========================================
+  MindMate v3 - Your Environment Setup
+========================================
+
+STEP 1: Create a file named .env.local in the mindmate-v3 folder
+
+STEP 2: Copy and paste the following into .env.local:
+
+----------------------------------------
+
+# Database
+# ⚠️ IMPORTANT: Replace <db_password> with your actual MongoDB password
+MONGODB_URI=mongodb+srv://ammarbinanwarfuad_db_user:<db_password>@clusterv3.mjdrz2v.mongodb.net/mindmate?retryWrites=true&w=majority&appName=Clusterv3
+
+# NextAuth Configuration
+NEXTAUTH_URL=http://localhost:3000
+# Generate a secret key by running: openssl rand -base64 32
+NEXTAUTH_SECRET=PLEASE_GENERATE_SECRET_KEY
+
+# Gemini AI API Key
+# Get your key from: https://makersuite.google.com/app/apikey
+GEMINI_API_KEY=your_gemini_api_key_here
+
+# Encryption Key (MUST be exactly 32 characters)
+ENCRYPTION_KEY=abcdefghijklmnopqrstuvwxyz123456
+
+# Optional: Google OAuth
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+
+# App Configuration
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+NODE_ENV=development
+
+----------------------------------------
+
+STEP 3: Update these values:
+
+1. Replace <db_password> in MONGODB_URI with your MongoDB password
+
+2. Generate NEXTAUTH_SECRET by running in terminal:
+   openssl rand -base64 32
+   (or use any secure random 32+ character string)
+
+3. Get your GEMINI_API_KEY from:
+   https://makersuite.google.com/app/apikey
+
+4. The ENCRYPTION_KEY is already set to a 32-character string.
+   You can change it if you want, but it MUST be exactly 32 characters.
+
+STEP 4: Verify your setup:
+   cd mindmate-v3
+   npm run check-env
+
+STEP 5: Install and run:
+   npm install
+   npm run dev
+
+========================================
+Your MongoDB connection is already configured!
+Just need to:
+1. Replace the password
+2. Get Gemini API key
+3. Generate NextAuth secret
+
+Then you're ready to go! 🚀
+========================================
+

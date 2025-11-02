@@ -1,0 +1,140 @@
+
+> mindmate-v3@3.0.0 lint
+> next lint
+
+`next lint` is deprecated and will be removed in Next.js 16.
+For new projects, use create-next-app to choose your preferred linter.
+For existing projects, migrate to the ESLint CLI:
+npx @next/codemod@canary next-lint-to-eslint-cli .
+
+
+./app/(dashboard)/messages/page.tsx
+124:41  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./app/(dashboard)/mood/new/page.tsx
+66:18  Warning: 'err' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./app/(dashboard)/profile/page.tsx
+4:10  Warning: 'useSession' is defined but never used.  @typescript-eslint/no-unused-vars
+88:31  Warning: 'field' is defined but never used.  @typescript-eslint/no-unused-vars
+155:26  Warning: 'error' is defined but never used.  @typescript-eslint/no-unused-vars
+203:26  Warning: 'error' is defined but never used.  @typescript-eslint/no-unused-vars
+348:25  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+389:33  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./app/api/auth/register/route.ts
+83:23  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./app/api/chat/route.ts
+10:27  Warning: 'req' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./app/api/community/posts/route.ts
+19:18  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+119:19  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./app/api/community/posts/[id]/comments/route.ts
+101:42  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./app/api/community/posts/[id]/comments/[commentId]/like/route.ts
+41:37  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+47:25  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+48:25  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+48:63  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+51:25  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+52:25  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+52:51  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+58:37  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+63:29  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+79:36  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+80:38  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./app/api/community/posts/[id]/react/route.ts
+50:36  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+50:88  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+55:36  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+55:91  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+62:36  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+62:77  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+65:36  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+74:35  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./app/api/connections/disconnect/route.ts
+31:22  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./app/api/connections/request/route.ts
+54:69  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+55:77  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./app/api/connections/route.ts
+41:22  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+65:26  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+91:58  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+93:17  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+96:17  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./app/api/journal/route.ts
+74:22  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./app/api/matching/find/route.ts
+18:25  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./app/api/mood/route.ts
+26:22  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+111:21  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./app/api/mood/stats/route.ts
+60:34  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+77:34  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./app/api/user/profile/route.ts
+50:27  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+76:21  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./app/api/user/settings/route.ts
+57:27  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./components/auth/LoginForm.tsx
+44:18  Warning: 'err' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./components/auth/RegisterForm.tsx
+44:18  Warning: 'err' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./components/chat/ChatInterface.tsx
+89:18  Warning: 'error' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./components/community/ForumFeed.tsx
+39:8  Warning: React Hook useEffect has a missing dependency: 'loadPosts'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+87:59  Error: `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`.  react/no-unescaped-entities
+87:73  Error: `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`.  react/no-unescaped-entities
+
+./components/community/PostCard.tsx
+88:8  Warning: React Hook useEffect has a missing dependency: 'loadComments'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+385:83  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./components/layout/Navbar.tsx
+211:49  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+380:41  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./components/messages/MessageInterface.tsx
+5:8  Warning: 'Card' is defined but never used.  @typescript-eslint/no-unused-vars
+46:8  Warning: React Hook useEffect has a missing dependency: 'loadMessages'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./components/mood/MoodCalendar.tsx
+5:10  Warning: 'MOOD_EMOJIS' is defined but never used.  @typescript-eslint/no-unused-vars
+17:12  Warning: 'isLoading' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+21:8  Warning: React Hook useEffect has a missing dependency: 'loadMoodData'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./lib/db/models/Notification.ts
+25:16  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./lib/services/matching.ts
+15:12  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+39:30  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+43:18  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./lib/services/notifications.ts
+4:11  Warning: 'CreateNotificationOptions' is defined but never used.  @typescript-eslint/no-unused-vars
+12:16  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+24:20  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules
