@@ -1,0 +1,165 @@
+🚀 Next.js Performance & Navigation Audit Checklist
+
+Use this list to pinpoint exactly why your website doesn’t feel smooth between routes — and what to optimize next.
+
+⚙️ 1. Routing & Navigation
+
+Are you using the App Router (app/) or the Pages Router (pages/)?
+
+Are you navigating with <Link> components or using router.push() manually?
+
+Do route transitions trigger new data fetching on the client, or is data already available from Server Components / getServerSideProps / fetch()?
+
+Do you experience a white flash, flicker, or layout shift when changing routes?
+
+Are you using layout.tsx to persist shared UI (navbar/sidebar/footer) between routes?
+
+Are your dynamic routes using loading states properly (loading.tsx)?
+
+Do you have route prefetching enabled (<Link prefetch={true}>)?
+
+Have you tried next/navigation's useTransition() for smoother state transitions?
+
+🧠 2. Rendering Strategy
+
+Are you using Server Components wherever possible?
+
+Are there pages unnecessarily marked with "use client" that could remain server-side?
+
+Do you use React Suspense or loading.tsx for instant skeleton/loading screens?
+
+Are you doing heavy hydration (large props, deep trees, complex client states)?
+
+Are you using memoization (React.memo, useMemo, useCallback) to prevent unnecessary re-renders?
+
+Does every route remount the entire layout, or only page-level content?
+
+Are you splitting components by route or loading everything globally?
+
+Do you have conditional rendering or dynamic imports for heavy components?
+
+⚡ 3. Data Fetching & Caching
+
+Do you fetch data with fetch() inside Server Components or on the client?
+
+Are you using cache: "force-cache", revalidate, or no-store effectively?
+
+Are multiple routes refetching identical data instead of sharing cached results?
+
+Are you using a data-fetching library like SWR or React Query for client caching and optimistic UI?
+
+Are you using Next.js Route Handlers (app/api/...) efficiently, or external APIs?
+
+Do you have stale or over-frequent revalidations slowing page swaps?
+
+Have you verified that your fetch responses are compressed (gzip/brotli)?
+
+Are you using next.config.js fetchCache or runtime properly (e.g., “edge”, “nodejs”)?
+
+🎨 4. Assets, Bundles & Static Files
+
+Have you analyzed your bundle size (next build → .next/analyze)?
+
+What’s your initial JavaScript size and route-level code split size?
+
+Are you importing large libraries globally (e.g., moment, lodash, three.js) or lazy-loading them?
+
+Are you using Next/Image for all images, especially above-the-fold?
+
+Do you use priority for hero images?
+
+Are images properly optimized (WebP/AVIF, responsive sizes)?
+
+Are there unused fonts, icons, or CSS included on every route?
+
+Have you enabled font-display: swap for faster text rendering?
+
+Do you use TailwindCSS JIT and purge unused styles in production?
+
+Are you using static imports for JSON/data when possible instead of fetching?
+
+🖥️ 5. Server & Network
+
+Are your pages SSR, SSG, or CSR — and is this choice optimal?
+
+What’s your TTFB (Time To First Byte) on route change (check Chrome DevTools → Network → Timing)?
+
+Are you hosting on Vercel, or a custom server (VPS, shared host, etc.)?
+
+Is your backend/API region close to your frontend deployment?
+
+Do you use Edge Functions or Middleware — could they be delaying requests?
+
+Is your API protected by CORS or auth layers that add latency?
+
+Are you using HTTP/2 or HTTP/3 for faster multiplexing?
+
+Are your cache headers (CDN / browser) properly configured?
+
+Do you have server logs or tracing to identify slow responses?
+
+🧩 6. UX & Perceived Performance
+
+Do you use Framer Motion / React Transition Group for route transitions?
+
+Are transitions blocking render or running concurrently?
+
+Do you keep global state/context alive across pages (e.g., user session, cart data)?
+
+Does every route navigation cause global context or provider re-renders?
+
+Do you prefetch routes on hover or in viewport?
+
+Are there loading skeletons or shimmer placeholders that appear instantly?
+
+Does content jump or shift layout while images/text load (CLS issue)?
+
+Do animations feel snappy (<200ms) or laggy (>400ms)?
+
+Are you using prefetch meta tags or Next.js route prefetch for instant transitions?
+
+🧪 7. Deep Performance Testing
+
+Have you run Lighthouse, WebPageTest, or Vercel Analytics to benchmark?
+
+What’s your Performance score in Lighthouse (mobile & desktop)?
+
+Have you used React Profiler to find expensive component renders?
+
+Have you compared dev vs production performance (next build + next start)?
+
+Have you used Chrome Performance tab to check long tasks or blocking scripts?
+
+Are you monitoring memory usage or JS heap size across navigations?
+
+Have you tested slow 3G or throttled network to simulate low-end users?
+
+Have you tested first navigation vs subsequent navigations (cached behavior)?
+
+Do you track Core Web Vitals (LCP, FID, CLS, TTFB) in real user monitoring tools (Vercel / Cloudflare / Google Analytics)?
+
+🧭 8. Deployment & Optimization Config
+
+Are you using Image Optimization domains correctly in next.config.js?
+
+Have you enabled Compression (gzip/brotli) in your server or host?
+
+Are you using Incremental Static Regeneration (ISR) where suitable?
+
+Have you configured next/script strategy="lazyOnload" for third-party scripts?
+
+Are you using next/font for local fonts to avoid layout shifts?
+
+Have you tested turbo mode in Next.js 15/16 for dev performance gains?
+
+Are you leveraging middleware caching or edge caching for dynamic routes?
+
+Are you serving static files (favicon, fonts, images) from CDN / Edge Cache?
+
+✅ Once you answer these, I can:
+
+Identify your main bottlenecks (rendering, routing, or data-fetching).
+
+Recommend exact optimizations (e.g., prefetch tuning, server component refactor, caching strategy).
+
+Help you achieve instant, native-app-like route transitions — like Vercel Dashboard or Notion.

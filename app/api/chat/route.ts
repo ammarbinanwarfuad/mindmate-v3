@@ -97,13 +97,6 @@ export async function POST(req: Request) {
             }
         }
 
-        // Add user message
-        conversation.messages.push({
-            role: 'user',
-            content: message,
-            timestamp: new Date(),
-        });
-
         // Build user context for personalization
         let userContext;
         try {
@@ -114,12 +107,19 @@ export async function POST(req: Request) {
             userContext = undefined;
         }
 
-        // Get AI response with user context
+        // Get AI response with user context (use previous messages, not including current one)
         const aiResponse = await getChatResponse(
-            conversation.messages.slice(-10), // Last 10 messages for context
+            conversation.messages.slice(-10), // Last 10 messages for context (before adding new message)
             message,
             userContext // Pass user context for personalization
         );
+
+        // Add user message after getting response (to include in saved conversation)
+        conversation.messages.push({
+            role: 'user',
+            content: message,
+            timestamp: new Date(),
+        });
 
         // Add AI response
         conversation.messages.push({

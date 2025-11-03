@@ -68,8 +68,10 @@ export async function getChatResponse(
                 parts: [{ text: msg.content }],
             }));
 
+        // Use systemInstruction to persist personalized context throughout conversation
         const chat = model.startChat({
             history: chatHistory,
+            systemInstruction: systemPrompt,
             generationConfig: {
                 temperature: 0.7,
                 topK: 40,
@@ -78,20 +80,8 @@ export async function getChatResponse(
             },
         });
 
-        // Include system prompt and context for first message or when context is provided
-        let messageWithContext: string;
-        if (conversationHistory.length === 0) {
-            // First message - include full system prompt with context
-            messageWithContext = `${systemPrompt}\n\nUser: ${userMessage}`;
-        } else if (userContext && conversationHistory.length <= 2) {
-            // Early in conversation - include context reminder if relevant
-            messageWithContext = userMessage;
-        } else {
-            // Regular message - just send the user message
-            messageWithContext = userMessage;
-        }
-
-        const result = await chat.sendMessage(messageWithContext);
+        // Send user message directly - systemInstruction handles the context
+        const result = await chat.sendMessage(userMessage);
         const response = await result.response;
         const assistantMessage = response.text();
 
@@ -131,23 +121,18 @@ export async function getChatResponseStreaming(
                 parts: [{ text: msg.content }],
             }));
 
+        // Use systemInstruction to persist personalized context throughout conversation
         const chat = model.startChat({
             history: chatHistory,
+            systemInstruction: systemPrompt,
             generationConfig: {
                 temperature: 0.7,
                 maxOutputTokens: 500,
             },
         });
 
-        // Include system prompt and context for first message
-        let messageWithContext: string;
-        if (conversationHistory.length === 0) {
-            messageWithContext = `${systemPrompt}\n\nUser: ${userMessage}`;
-        } else {
-            messageWithContext = userMessage;
-        }
-
-        const result = await chat.sendMessageStream(messageWithContext);
+        // Send user message directly - systemInstruction handles the context
+        const result = await chat.sendMessageStream(userMessage);
         let fullText = '';
 
         for await (const chunk of result.stream) {
