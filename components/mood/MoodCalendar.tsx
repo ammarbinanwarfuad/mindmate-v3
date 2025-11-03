@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, isToday } from 'date-fns';
 import { MOOD_EMOJIS } from '@/lib/utils/constants';
 import { getMoodBgColor } from '@/lib/utils/helpers';
@@ -16,11 +16,7 @@ export default function MoodCalendar() {
     const [moodData, setMoodData] = useState<MoodEntry[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        loadMoodData();
-    }, [currentMonth]);
-
-    const loadMoodData = async () => {
+    const loadMoodData = useCallback(async () => {
         try {
             setIsLoading(true);
             const start = format(startOfMonth(currentMonth), 'yyyy-MM-dd');
@@ -39,7 +35,11 @@ export default function MoodCalendar() {
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [currentMonth]);
+
+    useEffect(() => {
+        loadMoodData();
+    }, [loadMoodData]);
 
     const monthStart = startOfMonth(currentMonth);
     const monthEnd = endOfMonth(currentMonth);

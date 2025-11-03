@@ -1,17 +1,6 @@
 import { connectDB } from '@/lib/db/mongodb';
 import NotificationModel, { NotificationType } from '@/lib/db/models/Notification';
 
-interface CreateNotificationOptions {
-    userId: string;
-    type: NotificationType;
-    title: string;
-    message: string;
-    link?: string;
-    fromUserId?: string;
-    fromUserName?: string;
-    metadata?: any;
-}
-
 export async function createNotification(
     userId: string,
     type: NotificationType,

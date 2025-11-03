@@ -73,21 +73,21 @@ export async function buildUserContext(userId: string, forceRefresh = false): Pr
     }
 
     // Check privacy settings (default to true if not set)
-    const allowPersonalization = user.privacy?.dataCollection?.allowPersonalization ?? true;
+    const allowPersonalization = (user as any).privacy?.dataCollection?.allowPersonalization ?? true;
     const privacySettings = {
         allowPersonalization,
-        includeJournalEntries: allowPersonalization && (user.privacy?.dataCollection?.allowPersonalization ?? true),
-        includeMoodData: allowPersonalization && (user.privacy?.dataCollection?.allowPersonalization ?? true),
+        includeJournalEntries: allowPersonalization && ((user as any).privacy?.dataCollection?.allowPersonalization ?? true),
+        includeMoodData: allowPersonalization && ((user as any).privacy?.dataCollection?.allowPersonalization ?? true),
     };
 
     // If personalization is disabled, return minimal context
     if (!privacySettings.allowPersonalization) {
         return {
             profile: {
-                name: user.profile.name,
-                university: user.profile.university,
-                year: user.profile.year,
-                bio: user.profile.bio,
+                name: (user as any).profile.name,
+                university: (user as any).profile.university,
+                year: (user as any).profile.year,
+                bio: (user as any).profile.bio,
             },
             moodPatterns: {
                 averageScore: 0,
@@ -146,10 +146,10 @@ export async function buildUserContext(userId: string, forceRefresh = false): Pr
 
     const context: UserContext = {
         profile: {
-            name: user.profile.name,
-            university: user.profile.university,
-            year: user.profile.year,
-            bio: user.profile.bio,
+            name: (user as any).profile.name,
+            university: (user as any).profile.university,
+            year: (user as any).profile.year,
+            bio: (user as any).profile.bio,
         },
         moodPatterns,
         journalThemes,
@@ -498,15 +498,9 @@ export function buildContextSummary(context: UserContext): string {
  * Get decrypted journal entries from mood entries (if privacy allows)
  */
 export async function getDecryptedJournalEntries(userId: string, limit: number = 5): Promise<string[]> {
-    const privacySettings = {
-        allowPersonalization: true,
-        includeJournalEntries: true,
-        includeMoodData: true,
-    };
-
     // Check user privacy settings
     const user = await UserModel.findById(userId).select('privacy').lean();
-    if (user && user.privacy?.dataCollection?.allowPersonalization === false) {
+    if (user && (user as any).privacy?.dataCollection?.allowPersonalization === false) {
         return [];
     }
 
