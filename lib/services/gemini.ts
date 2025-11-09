@@ -1,7 +1,13 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { UserContext, buildContextSummary } from './user-context';
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+// Validate API key
+if (!process.env.GEMINI_API_KEY) {
+    console.error('❌ GEMINI_API_KEY is not set in environment variables!');
+    console.error('Please add GEMINI_API_KEY to your .env.local file');
+}
+
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 
 const BASE_SYSTEM_PROMPT = `You are MindMate, an empathetic AI wellness companion for university students. Your role:
 
@@ -57,7 +63,9 @@ export async function getChatResponse(
     userContext?: UserContext
 ): Promise<ChatResponse> {
     try {
-        const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-exp' });
+        // Use gemini-1.5-flash as fallback if 2.0 is not available
+        const modelName = process.env.GEMINI_MODEL || 'gemini-1.5-flash';
+        const model = genAI.getGenerativeModel({ model: modelName });
 
         const systemPrompt = buildSystemPrompt(userContext);
 
@@ -95,6 +103,14 @@ export async function getChatResponse(
 
     } catch (error) {
         console.error('Gemini API Error:', error);
+        const modelName = process.env.GEMINI_MODEL || 'gemini-1.5-flash';
+        console.error('Error details:', {
+            message: error instanceof Error ? error.message : 'Unknown error',
+            stack: error instanceof Error ? error.stack : undefined,
+            model: modelName,
+            hasApiKey: !!process.env.GEMINI_API_KEY,
+            apiKeyLength: process.env.GEMINI_API_KEY?.length || 0,
+        });
         return {
             message: "I'm having trouble connecting right now. Please try again in a moment.",
             crisisDetected: false,
@@ -111,7 +127,9 @@ export async function getChatResponseStreaming(
     userContext?: UserContext
 ): Promise<ChatResponse> {
     try {
-        const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-exp' });
+        // Use gemini-1.5-flash as fallback if 2.0 is not available
+        const modelName = process.env.GEMINI_MODEL || 'gemini-1.5-flash';
+        const model = genAI.getGenerativeModel({ model: modelName });
         const systemPrompt = buildSystemPrompt(userContext);
 
         const chatHistory = conversationHistory
@@ -151,6 +169,14 @@ export async function getChatResponseStreaming(
 
     } catch (error) {
         console.error('Gemini Streaming Error:', error);
+        const modelName = process.env.GEMINI_MODEL || 'gemini-1.5-flash';
+        console.error('Streaming Error details:', {
+            message: error instanceof Error ? error.message : 'Unknown error',
+            stack: error instanceof Error ? error.stack : undefined,
+            model: modelName,
+            hasApiKey: !!process.env.GEMINI_API_KEY,
+            apiKeyLength: process.env.GEMINI_API_KEY?.length || 0,
+        });
         return {
             message: "I'm having trouble connecting right now. Please try again in a moment.",
             crisisDetected: false,
@@ -164,7 +190,9 @@ export async function generateMoodInsights(
     moodData: { date: string; moodScore: number; triggers: string[]; activities: string[] }[]
 ): Promise<string> {
     try {
-        const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-exp' });
+        // Use gemini-1.5-flash as fallback if 2.0 is not available
+        const modelName = process.env.GEMINI_MODEL || 'gemini-1.5-flash';
+        const model = genAI.getGenerativeModel({ model: modelName });
 
         const prompt = `As a mental wellness AI, analyze this mood data and provide brief, actionable insights (3-4 sentences):
 
